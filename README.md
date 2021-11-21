@@ -3,17 +3,10 @@ I am currently working on developing this repository. It will include python cod
 (The files are yet to be placed in correct order)
 
 # Tensorflow-2.0
-<b>Convolutional Neural Network.ipynb</b> - jupyter notebook explains in detail on how to create a neural network and add different layers in the neural network.<br>
-<b>tensorflow.keras cheat sheet.ipynb</b> - tips on how to use Keras API built over Tensorflow 2 for training CNN models
+This repository gives a brief introduction on how to use latest version of Tensorflow 2.0 (Deep learning framework) to build up neural networks.
 
 # PyTorch
-This repository gives a brief introduction on PyTorch (Deep Learning framework) and some basic codes examples to start building Neural network from scratch. Sequence of files is -
-* <b>1. PyTorch Introduction.ipynb</b>
-* <b>2. PyTorch-Tensors.ipynb</b> - gives pytorch implementation of backpropagation algorithm
-* <b>3. PyTorch-Autograd.ipynb</b> - 
-* <b>4. PyTorch- Sigmoid.ipynb</b>
-* <b>5. PyTorch-nn.ipynb</b>
-* <b>6. PyTorch-optim.ipynb</b>
-* <b>7. PyTorch-abstraction</b>
+This repository gives a brief introduction on PyTorch (Deep Learning framework) and some basic codes examples to start building Neural network from scratch
 
 # Scikit-learn
+This repository gives an introduction and some basics on how to use Scikit learn API to build neural networks
