@@ -10,3 +10,6 @@ This repository gives a brief introduction on PyTorch (Deep Learning framework) 
 
 # Scikit-learn
 This repository gives an introduction and some basics on how to use Scikit learn API to build neural network
+
+# Image-Segmentation-using-Pixellib
+This repository runs pixel-wise image segmentation on images and forms masks on the objects detected with certain accuracies
