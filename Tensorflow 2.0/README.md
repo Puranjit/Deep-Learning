@@ -5,9 +5,9 @@ This repository gives a brief introduction on how to use latest version of Tenso
 <b>Tensorflow-Keras (Vanilla).py</b> - building a vanilla neural network using Tensorflow 2.0
 
 ## Deep learning project
-I worked on a deep learning project during Spring 2022. I used the dataset from [Kaggle](https://www.kaggle.com/datasets/fpeccia/weed-detection-in-soybean-crops) and prepared models using different architectures and trained them on this dataset.
-<b>Resnet50.py</b>
-<b>Resnet101.py</b>
-<b>Resnet152.py</b>
-<b>InceptionV3.py</b>
+I worked on a deep learning project during Spring 2022. I used the dataset from [Kaggle](https://www.kaggle.com/datasets/fpeccia/weed-detection-in-soybean-crops) and prepared models using different architectures and trained them on this dataset.<br>
+<b>Resnet50.py</b><br>
+<b>Resnet101.py</b><br>
+<b>Resnet152.py</b><br>
+<b>InceptionV3.py</b><br>
 <b>InceptionResNetV2.py</b>
