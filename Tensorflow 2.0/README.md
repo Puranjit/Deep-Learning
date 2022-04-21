@@ -6,8 +6,8 @@ This repository gives a brief introduction on how to use latest version of Tenso
 
 ## Deep learning project
 I worked on a deep learning project during Spring 2022. I used the dataset from [Kaggle](https://www.kaggle.com/datasets/fpeccia/weed-detection-in-soybean-crops) and prepared models using different architectures and trained them on this dataset.<br>
-<b>Resnet50.py</b><br>
-<b>Resnet101.py</b><br>
-<b>Resnet152.py</b><br>
-<b>InceptionV3.py</b><br>
-<b>InceptionResNetV2.py</b>
+<b>1. Resnet50.py</b><br>
+<b>2. Resnet101.py</b><br>
+<b>3. Resnet152.py</b><br>
+<b>4. InceptionV3.py</b><br>
+<b>5. InceptionResNetV2.py</b>
