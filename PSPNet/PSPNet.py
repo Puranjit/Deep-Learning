@@ -1,16 +1,10 @@
 # -*- coding: utf-8 -*-
 """
-Created on Wed Mar  1 17:54:07 2023
-
-@author: pzs0098
-"""
-
-# -*- coding: utf-8 -*-
-"""
 Created on Tue Oct 18 01:55:46 2022
 
 @author: psingh24
 """
+
 # importing libraries
 import os
 import cv2
@@ -26,8 +20,8 @@ import random
 # start_time = time.time()
 
 # Reading Images from the training dataset
-train_img_path = "Data_PSP/train_images/train/" # Change
-train_mask_path = "Data_PSP/train_masks/train/" # Change
+train_img_path = "Data_PSP/" # Change
+train_mask_path = "Data_PSP/" # Change
 
 
 img_list = os.listdir(train_img_path)
@@ -51,7 +45,6 @@ num_images = len(os.listdir(train_img_path))
 # plt.title('Mask')
 # plt.show()
 
-
 # Defining batch_size and total number of pixel associated classes in our annotated dataset
 seed = 24
 batch_size = 32
@@ -62,13 +55,6 @@ scaler = MinMaxScaler()
 from tensorflow.keras.utils import to_categorical
 
 # Defining backbone
-# available models that could be used as backbone: ['resnet18', 'resnet34', 'resnet50', 
-# 'resnet101', 'resnet152', 'seresnet18', 'seresnet34', 'seresnet50', 'seresnet101', 
-# 'seresnet152', 'seresnext50', 'seresnext101', 'senet154', 'resnext50', 'resnext101', 
-# 'vgg16', 'vgg19', 'densenet121', 'densenet169', 'densenet201', 'inceptionresnetv2', 
-# 'inceptionv3', 'mobilenet', 'mobilenetv2', 'efficientnetb0', 'efficientnetb1', 
-# 'efficientnetb2', 'efficientnetb3', 'efficientnetb4', 'efficientnetb5', 'efficientnetb6', 
-# 'efficientnetb7']
 
 # Use this to preprocess input for transfer learning
 BACKBONE = 'resnet50'
@@ -79,16 +65,10 @@ preprocess_input = sm.get_preprocessing(BACKBONE)
 def preprocess_data(img, mask, n_classes):
     #Scale images
     img = scaler.fit_transform(img.reshape(-1, img.shape[-1])).reshape(img.shape)
-    # print('Kidda')
     # img = preprocess_input(img)  #Preprocess based on the pretrained backbone...
     #Convert mask to one-hot
-    # mask = np.where(mask==117,1,mask)
-    # mask = np.where(mask==199,2,mask)
     # print(np.unique(mask))
     mask = to_categorical(mask, n_classes)
-    
-    # print('HHOO')
-      
     return (img,mask)
 
 #Define the generator.
@@ -123,8 +103,7 @@ def trainGenerator(train_img_path, train_mask_path, num_class):
         seed = seed)
     
     train_generator = zip(image_generator, mask_generator)
-    # print('hello')
-        
+       
     for (img, mask) in train_generator:
     
         k = list(np.unique(mask))
@@ -135,17 +114,16 @@ def trainGenerator(train_img_path, train_mask_path, num_class):
                 mask = np.where(mask == k[i], 0, mask)
                 
         img, mask = preprocess_data(img, mask, num_class)
-        # print('hi')
         yield (img, mask)
 
 # Run the code to perform data augmentation on train dataset
-train_img_path = "Data_PSP/train_images/" # Change
-train_mask_path = "Data_PSP/train_masks/" # Change
+train_img_path = "Data_PSP/" # Change
+train_mask_path = "Data_PSP/" # Change
 train_img_gen = trainGenerator(train_img_path, train_mask_path, num_class = 12)
 
 # Run the code to perform data augmentation on train dataset
-val_img_path = "Data_PSP/val_images/" # Change
-val_mask_path = "Data_PSP/val_masks/" # Change
+val_img_path = "Data_PSP/" # Change
+val_mask_path = "Data_PSP/" # Change
 val_img_gen = trainGenerator(val_img_path, val_mask_path, num_class = 12)
 
 x, y = train_img_gen.__next__()
@@ -195,10 +173,7 @@ model = sm.PSPNet(BACKBONE, encoder_weights='imagenet',
                 classes=n_classes, activation='softmax')
 
 # from focal_loss import SparseCategoricalFocalLoss
-
 # Compiling model
-# model.compile('Adam', loss = sm.losses.CategoricalCELoss(gamma = 5), metrics = metrics)
-# model.compile('Adam', loss = sm.losses.CategoricalFocalLoss(gamma = 3), metrics = metrics)
 model.compile('Adam', loss = sm.losses.categorical_crossentropy, metrics = metrics)
 
 print(model.summary())
@@ -245,169 +220,6 @@ plt.legend(loc = 'center left', bbox_to_anchor=(1, 0.5))
 plt.savefig('f1Curveb16e50Rx50.png')
 plt.show()
 
-model = load_model('Historyb16RV2e50Iou50.hdf5', compile = False) # Change
-
-k = []
-values = []
-veg = []
-maskk = []
-# vegeta = []
-# y_true = np.ones(val_steps_per_epoch)
-for i in range(int(val_steps_per_epoch)):
-    # print(i)
-    test_image_batch, test_mask_batch = val_img_gen.__next__()
-    
-    #Convert categorical to integer for visualization and IoU calculation
-    test_mask_batch_argmax = np.argmax(test_mask_batch, axis = 3)
-    
-    test_pred_batch = model.predict(test_image_batch)
-    test_pred_batch_argmax = np.argmax(test_pred_batch, axis=3)
-    # test_pred_batch_argmax = np.argmax(test_pred_batch)
-    
-    # print("--- %s seconds ---" % (time.time() - start_time))
-    
-    # This code could be used to check the %age accuracy in performing prediction for all 
-    # classes using confusion matrix
-    
-    n_classes = 12
-    IOU_keras = MeanIoU(num_classes=n_classes)  
-    IOU_keras.update_state(test_pred_batch_argmax, test_mask_batch_argmax)
-    m = IOU_keras.result().numpy()
-    k.append(m)
-    # print("Mean IoU =", m)
-        #To calculate I0U for each class...
-        
-    # m = np.array(k)
-    # print("Mean IoU =", m.mean())    
-    
-    values = np.array(IOU_keras.get_weights()).reshape(n_classes, n_classes)
-
-    veg.append(np.sum(values[1:,:])/np.sum(values))
-    maskk.append(np.sum(values[:,1:])/np.sum(values))    
-
-    # veg.append(np.sum(values[i][1:,:])/np.sum(values[i]))
-    # maskk.append(np.sum(values[i][:,1:])/np.sum(values[i]))
-    # maskk.append(np.sum(values[:,1:])/np.sum(values[1:,:])*(np.sum(values[1:,:])/np.sum(values)))
-    
-    # sumD = 0 # vegetation cover initialization
-    # # sumB = 0 
-    # sumT = np.sum(values) # Total ROI
-    # # y_true[i] = (np.sum(values)-np.count_nonzero(test_mask_batch_argmax))/np.sum(values) # Vegetation cover besides frame
-    # for i in range(n_classes):
-
-    #     sumT -= values[0,i]
-    #     # sumB += values[i,0]
-    #     if i > 0:
-    #         sumD = sumD + values[i,i]
-           
-    # veg.append(sumD/sumT)
-    
-    # maskk.append(np.sum(values[1:,:])/np.sum(values))    
-    
-    # # maskk.append(np.count_nonzero(test_mask_batch_argmax)/np.sum(values)) # Actual vegetation cover
-    # vegeta.append(np.sum(values[:,1:])/np.sum(values)) # predicted vegetation cover
-    
-    
-    # print('Vegetation cover detected: ', sumD/sumT*100)
-
-
-import pandas as pd
-dfVgg19 = pd.DataFrame({'y_true': veg, 'y_pred': maskk})
-dfVgg19.to_excel('dfVgg19.xlsx') 
-
-import pandas as pd
-dfV2u2 = pd.DataFrame({'y_true': veg, 'y_pred': maskk})
-dfV2u2.to_excel('dfV2u2.xlsx') 
-
-df34 = pd.DataFrame({'y_true': veg, 'y_pred': maskk})
-df34.to_excel('df34.xlsx')
-        
-
-dfRx50 = pd.DataFrame({'y_true': veg, 'y_pred': maskk})
-dfRx50.to_excel('dfRx50.xlsx')
-        
-import scipy
-slope, intercept, r_value, p_value, std_err = scipy.stats.linregress(veg, maskk)
-
-import pandas as pd
-
-df = pd.DataFrame({'y_true': maskk, 'y_pred': veg})
-
-from sklearn.metrics import r2_score, mean_absolute_error, mean_squared_error, confusion_matrix
-
-# r2 = r2_score(vegeta, maskk)
-# print(r2)
-# r2 = r2_score(maskk, vegeta)
-# print(r2)
-
-#create basic scatterplot
-plt.plot(veg, maskk,  'o')
-plt.xlabel('Predicted Vegetation cover')
-plt.ylabel('Actual Vegetation cover')
-
-plt.plot(maskk, veg,  'o')
-plt.xlabel('Predicted Vegetation cover')
-plt.ylabel('Actual Vegetation cover')
-
-
-#obtain m (slope) and b(intercept) of linear regression line
-m, b = np.polyfit(veg, maskk, 1)
-
-# vegeta = np.array(vegeta, dtype = 'float64')
-
-#add linear regression line to scatterplot 
-# plt.plot(vegeta, m*vegeta+b)
-
-
-
-# data = {'y_true': np.round(y_true,2), 'y_pred': np.round(veg,2)}
-df2 = pd.DataFrame({'y_true': veg, 'y_pred': maskk})
-df2.to_excel('d2.xlsx')
-        
-# r2 = r2_score(maskk, veg)
-r2 = r2_score(veg, maskk)
-mse = mean_squared_error(veg, maskk)
-
-print("R-squared:", r2)
-print("Mean squared error:", mse)
-
-#create basic scatterplot
-plt.plot(veg, maskk,  'o')
-plt.xlabel('Predicted Vegetation cover')
-plt.ylabel('Actual Vegetation cover')
-
-#obtain m (slope) and b(intercept) of linear regression line
-m, b = np.polyfit(veg, maskk, 1)
-
-veg = np.array(veg, dtype = 'float64')
-#add linear regression line to scatterplot
-plt.plot(veg, maskk)
-plt.plot(veg, m*veg+b)
-
-
-r2 = r2_score(maskk, veg)
-# r2 = r2_score(veg, maskk)
-mse = mean_squared_error(y_true, veg)
-
-print("R-squared:", r2)
-print("Mean squared error:", mse)
-
-#create basic scatterplot
-plt.plot(maskk, veg,  'o')
-plt.ylabel('Predicted Vegetation cover')
-plt.xlabel('Actual Vegetation cover')
-
-#obtain m (slope) and b(intercept) of linear regression line
-m, b = np.polyfit(maskk, veg, 1)
-maskk = np.array(maskk, dtype = 'float64')
-
-#add linear regression line to scatterplot 
-plt.plot(maskk, m*maskk+b)
-
-
-model = load_model('Historyb32R34e50.hdf5', compile = False)
-
-
 # Loading the created DL model
 model = load_model('Historyb16RV2e50Iou50.hdf5', compile = False) # Change
 
@@ -424,7 +236,7 @@ test_pred_batch_argmax = np.argmax(test_pred_batch, axis=3)
 # This code could be used to check the %age accuracy in performing prediction for all 
 # classes using confusion matrix
 
-n_classes = 12
+n_classes = 12 # Change
 IOU_keras = MeanIoU(num_classes=n_classes)  
 IOU_keras.update_state(test_pred_batch_argmax, test_mask_batch_argmax)
 m = IOU_keras.result().numpy()
@@ -432,36 +244,6 @@ print("Mean IoU =", m)
 
 #To calculate I0U for each class...
 values = np.array(IOU_keras.get_weights()).reshape(n_classes, n_classes)
-
-test_image_batch, test_mask_batch = val_img_gen.__next__()
-
-#Convert categorical to integer for visualization and IoU calculation
-test_mask_batch_argmax = np.argmax(test_mask_batch, axis = 3)
-
-test_pred_batch = model.predict(test_image_batch)
-test_pred_batch_argmax = np.argmax(test_pred_batch, axis=3)
-# test_pred_batch_argmax = np.argmax(test_pred_batch)
-
-# print("--- %s seconds ---" % (time.time() - start_time))
-
-# This code could be used to check the %age accuracy in performing prediction for all 
-# classes using confusion matrix
-
-n_classes = 13
-IOU_keras = MeanIoU(num_classes=n_classes)  
-IOU_keras.update_state(test_pred_batch_argmax, test_mask_batch_argmax)
-m = IOU_keras.result().numpy()
-# k.append(m)
-print("Mean IoU =", m)
-# print(values)
-
-# class1_IoU = values[0,0]/(values[0,0] + values[0,1] + values[0,2] + values[1,0] + values[2,0])
-# class2_IoU = values[1,1]/(values[1,1] + values[1,0] + values[1,2] + values[0,1] + values[2,1])
-# class3_IoU = values[2,2]/(values[2,2] + values[2,0] + values[2,1] + values[0,2] + values[1,2])
-
-# print(class1_IoU) # Background
-# print(class2_IoU) # Weeds
-# print(class3_IoU) # Soil
 
 # Also generate an image for the predictions performed on test_dataset
 img_num = random.randint(0, test_image_batch.shape[0])
