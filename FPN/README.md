@@ -1,0 +1,1 @@
+<b>Please find the Python code for training a semantic segmentation-based deep learning model using the Feature Pyramid Network (FPN) in this folder. You can refer to the following [link](https://arxiv.org/pdf/1612.03144v2.pdf) to learn more about the publication that introduced the FPN network.</b>
