@@ -5,6 +5,15 @@ Created on Fri Oct 13 20:42:44 2023
 @author: puran
 """
 
+# INSTALL THESE LIBRARIES
+# pip install python-dotenv
+# pip install PyPDF2
+# pip install docx
+# pip install langchain
+# pip install streamlit
+# pip install openai
+# pip install tiktoken
+
 from dotenv import load_dotenv
 import streamlit as st
 from PyPDF2 import PdfReader
