@@ -2,9 +2,9 @@
 Front end - html<br>
 Back end - Flask<br>
 
-<img width="500" alt="image" src="https://github.com/Puranjit/Deep-Learning/assets/36369377/b55f54c8-a7a1-4eb4-9b27-18b71d4e3198">
+<img width="400" alt="image" src="https://github.com/Puranjit/Deep-Learning/assets/36369377/57639034-37f2-4fae-834d-9f26f91c807e">
 <br>
-<img width="500" alt="image" src="https://github.com/Puranjit/Deep-Learning/assets/36369377/ce96439e-adad-4e47-8394-9f3171520461">
+<img width="400" alt="image" src="https://github.com/Puranjit/Deep-Learning/assets/36369377/185661d2-b91f-4fe0-aabc-7e90d556ce11">
 
 
 
