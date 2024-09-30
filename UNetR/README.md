@@ -1,1 +1,3 @@
-
+Implementation of UnetR model on my ucstom dataset<br> 
+UNetR model - The UNetR model (UNet with Transformers as the backbone) is a state-of-the-art deep learning architecture designed for medical image segmentation and other image analysis tasks. UNetR builds upon the traditional UNet model by integrating a Vision Transformer (ViT) as the encoder to capture long-range dependencies and global contextual information, while the decoder part retains the structure of the conventional UNet to reconstruct the fine-grained segmentation output.<br>
+Link to original paper - https://openaccess.thecvf.com/content/WACV2022/html/Hatamizadeh_UNETR_Transformers_for_3D_Medical_Image_Segmentation_WACV_2022_paper.html
