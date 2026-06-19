@@ -4,6 +4,9 @@ Created on Sat Jun  6 21:48:30 2026
 
 @author: puran
 """
+###
+This code extracts Feature embeddings using the DINOv3 model of DINOv3_vitb16 and trains ML models using the LazyPredict Library on those features to train on two target variables (Environment modeling)
+### 
 # FINAL CODE
 import warnings
 warnings.filterwarnings("ignore")
@@ -19,18 +22,14 @@ from lazypredict.Supervised import LazyRegressor, REGRESSORS
 # ─────────────────────────────────────────────
 # CONFIG
 # ─────────────────────────────────────────────
-# Daily_averaged_embeddings_Dv3_vits16plus; Daily_averaged_embeddings_Dv3_vitb16
-# Daily_averaged_embeddings_Dv3_vitl16; Daily_averaged_embeddings_Dv3_vith16plus
+# Daily_averaged_embeddings_Dv3_vitb16
 DATA_PATH    = "Daily_averaged_embeddings_Dv3_vitb16.xlsx"
 model_label  = DATA_PATH.split("_")[4].split(".")[0]
-# FEATURE_COLS = [f"dino_cls_{i}" for i in range(388)]
 FEATURE_COLS = [f"dino_cls_{i}" for i in range(772)]
-# FEATURE_COLS = [f"dino_cls_{i}" for i in range(1027)]
-# FEATURE_COLS = [f"dino_cls_{i}" for i in range(1284)]
+
 TARGETS      = ["NEE_f", "GPP_f"]
 
 df           = pd.read_excel(DATA_PATH, sheet_name=2)
-# df           = pd.read_excel(DATA_PATH)
 df["year"]   = pd.to_datetime(df["date"]).dt.year
 df["date"]   = pd.to_datetime(df["date"])
 years        = sorted(df["year"].unique())
@@ -41,7 +40,6 @@ print(f"Total rows  : {len(df)}")
 annual_stats = df.groupby('year')[['GPP_f','NEE_f']].agg(
     ['mean','std','min','max']
 )
-
 print(annual_stats)
 
 import seaborn as sns
@@ -51,7 +49,6 @@ plt.show()
 
 sns.boxplot(data=df, x='year', y='NEE_f')
 plt.show()
-
 
 # ─────────────────────────────────────────────
 # LOYO-CV — track ALL models + collect predictions
@@ -193,7 +190,6 @@ def run_loyo(df, target: str):
           f"Mean RMSE={mean_rmse:.4f}  Mean MAE={mean_mae:.4f}")
 
     return all_results, fold_summary, top5, best_name, pred_df, best_metrics
-
 
 # ─────────────────────────────────────────────
 # RUN FOR BOTH TARGETS
